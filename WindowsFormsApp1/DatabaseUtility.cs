@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Npgsql;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
+using Oracle.ManagedDataAccess.Client; 
+
 namespace WindowsFormsApp1
 {
     // Enum to represent supported database types
@@ -11,7 +13,9 @@ namespace WindowsFormsApp1
     {
         SqlServer,
         PostgreSQL,
-        MySQL
+        MySQL,
+        Oracle,
+        SqlServerWindowsAuth
     }
 
     public class DatabaseHandler
@@ -27,10 +31,9 @@ namespace WindowsFormsApp1
             _commandTimeout = commandTimeout;
         }
 
-
-        public DatabaseHandler(DatabaseType dbType, string server, string database, string user, string password,int connectionTimeout = 5, int commandTimeout = 60 * 60 * 6)
+        public DatabaseHandler(DatabaseType dbType, string server, string database, string user = null, string password = null, int connectionTimeout = 5, int commandTimeout = 60 * 60 * 6)
             : this(dbType, BuildConnectionString(dbType, server, database, user, password, connectionTimeout), commandTimeout: commandTimeout)
-        {}
+        { }
 
         // Method to check if the database connection is successful
         public bool CheckConnection()
@@ -57,11 +60,14 @@ namespace WindowsFormsApp1
             switch (_dbType)
             {
                 case DatabaseType.SqlServer:
+                case DatabaseType.SqlServerWindowsAuth:
                     return new SqlConnection(_connectionString);
                 case DatabaseType.PostgreSQL:
                     return new NpgsqlConnection(_connectionString);
                 case DatabaseType.MySQL:
                     return new MySqlConnection(_connectionString);
+                case DatabaseType.Oracle:
+                    return new OracleConnection(_connectionString);
                 default:
                     throw new ArgumentException("Unsupported database type.");
             }
@@ -115,6 +121,7 @@ namespace WindowsFormsApp1
                     switch (_dbType)
                     {
                         case DatabaseType.SqlServer:
+                        case DatabaseType.SqlServerWindowsAuth:
                             using (var adapter = new SqlDataAdapter((SqlCommand)command))
                             {
                                 adapter.Fill(dataTable);
@@ -128,6 +135,12 @@ namespace WindowsFormsApp1
                             break;
                         case DatabaseType.MySQL:
                             using (var adapter = new MySqlDataAdapter((MySqlCommand)command))
+                            {
+                                adapter.Fill(dataTable);
+                            }
+                            break;
+                        case DatabaseType.Oracle:
+                            using (var adapter = new OracleDataAdapter((OracleCommand)command))
                             {
                                 adapter.Fill(dataTable);
                             }
@@ -168,9 +181,20 @@ namespace WindowsFormsApp1
                         InitialCatalog = database,
                         UserID = user,
                         Password = password,
+                        IntegratedSecurity = false, // Default to SQL Server authentication
                         ConnectTimeout = connectionTimeout // Connection timeout in seconds
                     };
                     return sqlBuilder.ConnectionString;
+
+                case DatabaseType.SqlServerWindowsAuth:
+                    var sqlWindowsAuthBuilder = new SqlConnectionStringBuilder
+                    {
+                        DataSource = server,
+                        InitialCatalog = database,
+                        IntegratedSecurity = true, // Use Windows Authentication
+                        ConnectTimeout = connectionTimeout // Connection timeout in seconds
+                    };
+                    return sqlWindowsAuthBuilder.ConnectionString;
 
                 case DatabaseType.PostgreSQL:
                     var npgsqlBuilder = new NpgsqlConnectionStringBuilder
@@ -193,6 +217,16 @@ namespace WindowsFormsApp1
                         ConnectionTimeout = (uint)connectionTimeout // Connection timeout in seconds
                     };
                     return mysqlBuilder.ConnectionString;
+
+                case DatabaseType.Oracle:
+                    var oracleBuilder = new OracleConnectionStringBuilder
+                    {
+                        DataSource = $"{server}/{database}",
+                        UserID = user,
+                        Password = password,
+                        ConnectionTimeout = connectionTimeout // Connection timeout in seconds
+                    };
+                    return oracleBuilder.ConnectionString;
 
                 default:
                     throw new ArgumentException("Unsupported database type.");
