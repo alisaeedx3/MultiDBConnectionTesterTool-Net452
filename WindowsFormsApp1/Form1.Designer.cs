@@ -31,14 +31,14 @@
             this.radoPG = new System.Windows.Forms.RadioButton();
             this.radoSQLServer = new System.Windows.Forms.RadioButton();
             this.radoMySQL = new System.Windows.Forms.RadioButton();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtServer = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtDatabse = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtUser = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnTestConnection = new System.Windows.Forms.Button();
             this.txtSQL = new System.Windows.Forms.RichTextBox();
             this.btnExecuteNonQuery = new System.Windows.Forms.Button();
@@ -51,6 +51,8 @@
             this.btnExecuteQuery = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.txtResult = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtPort = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -63,6 +65,7 @@
             this.radoPG.Size = new System.Drawing.Size(81, 17);
             this.radoPG.TabIndex = 0;
             this.radoPG.TabStop = true;
+            this.radoPG.Tag = "0";
             this.radoPG.Text = "PostgreSQL";
             this.radoPG.UseVisualStyleBackColor = true;
             // 
@@ -73,6 +76,7 @@
             this.radoSQLServer.Name = "radoSQLServer";
             this.radoSQLServer.Size = new System.Drawing.Size(71, 17);
             this.radoSQLServer.TabIndex = 1;
+            this.radoSQLServer.Tag = "3";
             this.radoSQLServer.Text = "SqlServer";
             this.radoSQLServer.UseVisualStyleBackColor = true;
             // 
@@ -83,15 +87,16 @@
             this.radoMySQL.Name = "radoMySQL";
             this.radoMySQL.Size = new System.Drawing.Size(58, 17);
             this.radoMySQL.TabIndex = 2;
+            this.radoMySQL.Tag = "1";
             this.radoMySQL.Text = "MySQL";
             this.radoMySQL.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txtServer
             // 
-            this.textBox1.Location = new System.Drawing.Point(53, 28);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(193, 20);
-            this.textBox1.TabIndex = 3;
+            this.txtServer.Location = new System.Drawing.Point(53, 28);
+            this.txtServer.Name = "txtServer";
+            this.txtServer.Size = new System.Drawing.Size(120, 20);
+            this.txtServer.TabIndex = 3;
             // 
             // label1
             // 
@@ -105,18 +110,18 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(275, 31);
+            this.label2.Location = new System.Drawing.Point(330, 31);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "database";
             // 
-            // textBox2
+            // txtDatabse
             // 
-            this.textBox2.Location = new System.Drawing.Point(333, 28);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(193, 20);
-            this.textBox2.TabIndex = 5;
+            this.txtDatabse.Location = new System.Drawing.Point(388, 28);
+            this.txtDatabse.Name = "txtDatabse";
+            this.txtDatabse.Size = new System.Drawing.Size(120, 20);
+            this.txtDatabse.TabIndex = 5;
             // 
             // label3
             // 
@@ -127,29 +132,29 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "user";
             // 
-            // textBox3
+            // txtUser
             // 
-            this.textBox3.Location = new System.Drawing.Point(53, 51);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(193, 20);
-            this.textBox3.TabIndex = 7;
+            this.txtUser.Location = new System.Drawing.Point(53, 51);
+            this.txtUser.Name = "txtUser";
+            this.txtUser.Size = new System.Drawing.Size(120, 20);
+            this.txtUser.TabIndex = 7;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(275, 54);
+            this.label4.Location = new System.Drawing.Point(194, 54);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 13);
             this.label4.TabIndex = 10;
             this.label4.Text = "password";
             // 
-            // textBox4
+            // txtPassword
             // 
-            this.textBox4.Location = new System.Drawing.Point(333, 54);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.PasswordChar = '*';
-            this.textBox4.Size = new System.Drawing.Size(193, 20);
-            this.textBox4.TabIndex = 9;
+            this.txtPassword.Location = new System.Drawing.Point(247, 51);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
+            this.txtPassword.Size = new System.Drawing.Size(120, 20);
+            this.txtPassword.TabIndex = 9;
             // 
             // btnTestConnection
             // 
@@ -203,6 +208,7 @@
             this.radoOracle.Name = "radoOracle";
             this.radoOracle.Size = new System.Drawing.Size(56, 17);
             this.radoOracle.TabIndex = 16;
+            this.radoOracle.Tag = "2";
             this.radoOracle.Text = "Oracle";
             this.radoOracle.UseVisualStyleBackColor = true;
             // 
@@ -213,6 +219,7 @@
             this.radoSqlServerWindowsAuth.Name = "radoSqlServerWindowsAuth";
             this.radoSqlServerWindowsAuth.Size = new System.Drawing.Size(137, 17);
             this.radoSqlServerWindowsAuth.TabIndex = 17;
+            this.radoSqlServerWindowsAuth.Tag = "4";
             this.radoSqlServerWindowsAuth.Text = "SqlServerWindowsAuth";
             this.radoSqlServerWindowsAuth.UseVisualStyleBackColor = true;
             // 
@@ -262,11 +269,29 @@
             this.txtResult.Size = new System.Drawing.Size(473, 20);
             this.txtResult.TabIndex = 23;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(177, 31);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(34, 13);
+            this.label8.TabIndex = 26;
+            this.label8.Text = "PORT";
+            // 
+            // txtPort
+            // 
+            this.txtPort.Location = new System.Drawing.Point(207, 28);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(117, 20);
+            this.txtPort.TabIndex = 25;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(551, 590);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.txtPort);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtResult);
             this.Controls.Add(this.btnExecuteQuery);
@@ -280,13 +305,13 @@
             this.Controls.Add(this.txtSQL);
             this.Controls.Add(this.btnTestConnection);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.txtUser);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtDatabse);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtServer);
             this.Controls.Add(this.radoMySQL);
             this.Controls.Add(this.radoSQLServer);
             this.Controls.Add(this.radoPG);
@@ -303,14 +328,14 @@
         private System.Windows.Forms.RadioButton radoPG;
         private System.Windows.Forms.RadioButton radoSQLServer;
         private System.Windows.Forms.RadioButton radoMySQL;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtServer;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtDatabse;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtUser;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnTestConnection;
         private System.Windows.Forms.RichTextBox txtSQL;
         private System.Windows.Forms.Button btnExecuteNonQuery;
@@ -323,6 +348,8 @@
         private System.Windows.Forms.Button btnExecuteQuery;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtResult;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtPort;
     }
 }
 

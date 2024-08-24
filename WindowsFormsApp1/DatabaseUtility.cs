@@ -11,10 +11,10 @@ namespace WindowsFormsApp1
     // Enum to represent supported database types
     public enum DatabaseType
     {
-        SqlServer,
         PostgreSQL,
         MySQL,
-        Oracle,
+        Oracle, 
+        SqlServer,
         SqlServerWindowsAuth
     }
 
@@ -31,8 +31,15 @@ namespace WindowsFormsApp1
             _commandTimeout = commandTimeout;
         }
 
-        public DatabaseHandler(DatabaseType dbType, string server, string database, string user = null, string password = null, int connectionTimeout = 5, int commandTimeout = 60 * 60 * 6)
-            : this(dbType, BuildConnectionString(dbType, server, database, user, password, connectionTimeout), commandTimeout: commandTimeout)
+        public DatabaseHandler(DatabaseType dbType,
+            string server,
+            string database,
+            string user,
+            string password,
+            int port = 0,
+            int connectionTimeout = 5,
+            int commandTimeout = 60 * 60 * 6)
+            : this(dbType, BuildConnectionString(dbType, server, database, user, password, port, connectionTimeout), commandTimeout: commandTimeout)
         { }
 
         // Method to check if the database connection is successful
@@ -170,36 +177,36 @@ namespace WindowsFormsApp1
         }
 
         // Static method to build a connection string dynamically with a connection timeout
-        public static string BuildConnectionString(DatabaseType dbType, string server, string database, string user, string password, int connectionTimeout)
+        public static string BuildConnectionString(
+            DatabaseType dbType,
+            string server,
+            string database,
+            string user,
+            string password,
+            int port,
+            int connectionTimeout
+            )
         {
             switch (dbType)
             {
                 case DatabaseType.SqlServer:
+                case DatabaseType.SqlServerWindowsAuth:
                     var sqlBuilder = new SqlConnectionStringBuilder
                     {
-                        DataSource = server,
+                        DataSource = server.Contains(@"\") || port == 0 ? server : $"{server},{port}", // Use instance name or port
                         InitialCatalog = database,
+                        IntegratedSecurity = dbType == DatabaseType.SqlServerWindowsAuth, // Use Windows Authentication if specified
                         UserID = user,
                         Password = password,
-                        IntegratedSecurity = false, // Default to SQL Server authentication
                         ConnectTimeout = connectionTimeout // Connection timeout in seconds
                     };
                     return sqlBuilder.ConnectionString;
-
-                case DatabaseType.SqlServerWindowsAuth:
-                    var sqlWindowsAuthBuilder = new SqlConnectionStringBuilder
-                    {
-                        DataSource = server,
-                        InitialCatalog = database,
-                        IntegratedSecurity = true, // Use Windows Authentication
-                        ConnectTimeout = connectionTimeout // Connection timeout in seconds
-                    };
-                    return sqlWindowsAuthBuilder.ConnectionString;
 
                 case DatabaseType.PostgreSQL:
                     var npgsqlBuilder = new NpgsqlConnectionStringBuilder
                     {
                         Host = server,
+                        Port = port > 0 ? port : 5432, // Default PostgreSQL port
                         Database = database,
                         Username = user,
                         Password = password,
@@ -211,6 +218,7 @@ namespace WindowsFormsApp1
                     var mysqlBuilder = new MySqlConnectionStringBuilder
                     {
                         Server = server,
+                        Port = port > 0 ? (uint)port : 3306, // Default MySQL port
                         Database = database,
                         UserID = user,
                         Password = password,
@@ -221,7 +229,7 @@ namespace WindowsFormsApp1
                 case DatabaseType.Oracle:
                     var oracleBuilder = new OracleConnectionStringBuilder
                     {
-                        DataSource = $"{server}/{database}",
+                        DataSource = port > 0 ? $"{server}:{port}/{database}" : $"{server}/{database}", // Include port if specified
                         UserID = user,
                         Password = password,
                         ConnectionTimeout = connectionTimeout // Connection timeout in seconds
